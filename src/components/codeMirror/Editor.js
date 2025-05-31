@@ -4,10 +4,12 @@ import {EditorState, Compartment} from '@codemirror/state';
 import {indentWithTab} from "@codemirror/commands"
 import {indentUnit} from '@codemirror/language';
 
-import {javascript} from "@codemirror/lang-javascript"
+import {javascript, esLint} from "@codemirror/lang-javascript"
 import {StreamLanguage} from "@codemirror/language"
 import {groovy} from "@codemirror/legacy-modes/mode/groovy"
-
+import { linter, lintGutter } from '@codemirror/lint'
+import * as eslint from "eslint-linter-browserify";
+import globals from 'globals'
 
 import {useRef, useEffect} from "@bpmn-io/properties-panel/preact/hooks";
 
@@ -63,6 +65,18 @@ export default function Editor(props) {
                     indentUnit.of("    "), // 4 spaces
                     keymap.of([indentWithTab]),
                     compartmentRef.current.of(getLanguage()),
+                    lintGutter(),
+                    linter(esLint(new eslint.Linter(), {
+                        languageOptions: {
+                            globals: {
+                                ...globals.es2015,
+                            },
+                            parserOptions: {
+                                ecmaVersion: 2015,
+                                sourceType: "script",
+                            },
+                        }
+                    })),
                     ...extensions
                 ]
             });
