@@ -88,7 +88,7 @@ function Format(props) {
     const businessObject = script || getBusinessObject(element);
 
     const getValue = () => {
-        return businessObject.get('scriptFormat').toLowerCase();
+        return businessObject.get('scriptFormat')?.toLowerCase();
     };
 
     const setValue = (value) => {
