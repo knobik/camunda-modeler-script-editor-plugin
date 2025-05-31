@@ -6,7 +6,7 @@ import {EditorView} from "codemirror"
 import {
     useCallback,
     useEffect,
-    useMemo, useRef,
+    useMemo,
     useState
 } from '@bpmn-io/properties-panel/preact/hooks';
 
@@ -15,14 +15,13 @@ import classnames from 'classnames';
 import {
     useError,
     useShowEntryEvent,
-    useElementVisible,
 } from '@bpmn-io/properties-panel';
 
 import {isFunction} from 'min-dash';
-import Editor from "../components/codeMirror/Editor";
-import {keymap} from "@codemirror/view";
+import JavascriptEditor from "../components/JavascriptEditor";
+import GroovyEditor from "../components/GroovyEditor";
 
-function CodeEditor(props) {
+function ScriptEditor(props) {
 
     const {
         id,
@@ -39,7 +38,6 @@ function CodeEditor(props) {
 
     const [localValue, setLocalValue] = useState(value);
 
-    const themeRef = useRef(null);
     const ref = useShowEntryEvent(id);
 
     /**
@@ -65,39 +63,37 @@ function CodeEditor(props) {
         handleInput(v);
     };
 
-    useEffect(() => {
-        if (!themeRef.current) {
-            // Calculate line height for 30 lines
-            // Default line height is typically around 1.2em-1.4em
-            const lineHeight = 1.3; // em
-            const maxLines = 30;
-            const maxHeight = `${lineHeight * maxLines}em`;
+    const theme = useMemo(() => {
+        // Calculate line height for 30 lines
+        // Default line height is typically around 1.2em-1.4em
+        const lineHeight = 1.3; // em
+        const maxLines = 30;
+        const maxHeight = `${lineHeight * maxLines}em`;
 
-            themeRef.current = EditorView.baseTheme({
-                '&.cm-focused': {
-                    outline: 'none',
-                },
-                '&': {
-                    border: '1px solid #B8BCC5',
-                },
-                '.cm-content': {
-                    // Remove the fixed height constraint
-                    minHeight: '1.3em', // At least one line
-                    maxHeight: maxHeight,
-                },
-                '.cm-scroller': {
-                    // Enable scrolling when content exceeds max height
-                    overflow: 'auto',
-                    maxHeight: maxHeight,
-                },
-                '.cm-wrap': {
-                    // Allow it to grow up to max height
-                    height: 'auto',
-                    maxHeight: maxHeight,
-                    border: '1px solid silver',
-                },
-            });
-        }
+        return EditorView.baseTheme({
+            '&.cm-focused': {
+                outline: 'none',
+            },
+            '&': {
+                border: '1px solid #B8BCC5',
+            },
+            '.cm-content': {
+                // Remove the fixed height constraint
+                minHeight: '1.3em', // At least one line
+                maxHeight: maxHeight,
+            },
+            '.cm-scroller': {
+                // Enable scrolling when content exceeds max height
+                overflow: 'auto',
+                maxHeight: maxHeight,
+            },
+            '.cm-wrap': {
+                // Allow it to grow up to max height
+                height: 'auto',
+                maxHeight: maxHeight,
+                border: '1px solid silver',
+            },
+        });
     }, []);
 
     useEffect(() => {
@@ -115,19 +111,34 @@ function CodeEditor(props) {
                     {label}
                 </TooltipEntry>
             </label>
-            {themeRef.current && (
-                <Editor
+            {language === 'javascript' && (
+                <JavascriptEditor
                     id={prefixId(id)}
                     ref={ref}
                     setValue={handleLocalInput}
                     value={localValue}
                     readOnly={disabled}
-                    language={language}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
                     extensions={[
-                        themeRef.current,
-                        EditorView.domEventHandlers({ blur: onBlur, focus: onFocus }),
+                        theme,
                         EditorView.lineWrapping,
-                    ]}
+                    ].filter(Boolean)}
+                />
+            )}
+            {language === 'groovy' && (
+                <GroovyEditor
+                    id={prefixId(id)}
+                    ref={ref}
+                    setValue={handleLocalInput}
+                    value={localValue}
+                    readOnly={disabled}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    extensions={[
+                        theme,
+                        EditorView.lineWrapping,
+                    ].filter(Boolean)}
                 />
             )}
         </div>
@@ -209,7 +220,7 @@ export default function ScriptEditorEntry(props) {
                 error ? 'has-error' : '')
             }
             data-entry-id={id}>
-            <CodeEditor
+            <ScriptEditor
                 id={id}
                 key={element}
                 label={label}

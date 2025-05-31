@@ -1,46 +1,21 @@
 import {EditorView, basicSetup} from "codemirror"
 import {keymap} from "@codemirror/view"
-import {EditorState, Compartment} from '@codemirror/state';
-import {indentWithTab} from "@codemirror/commands"
+import {EditorState} from '@codemirror/state';
+import {indentLess, indentMore} from "@codemirror/commands"
+import {acceptCompletion, completionStatus} from '@codemirror/autocomplete';
 import {indentUnit} from '@codemirror/language';
-
-import {javascript, esLint} from "@codemirror/lang-javascript"
-import {StreamLanguage} from "@codemirror/language"
-import {groovy} from "@codemirror/legacy-modes/mode/groovy"
-import { linter, lintGutter } from '@codemirror/lint'
-import * as eslint from "eslint-linter-browserify";
-import globals from 'globals'
-import {languageServer, LanguageServerClient} from 'codemirror-languageserver';
-
 import {useRef, useEffect} from "@bpmn-io/properties-panel/preact/hooks";
 
 export default function Editor(props) {
     const {
-        language,
         extensions = [],
         setValue,
         value,
         readOnly = false,
     } = props;
 
-    const serverUri = 'ws://localhost:3000/javascript';
-
     const viewRef = useRef(null);
     const editorRef = useRef(null);
-    const compartmentRef = useRef(new Compartment);
-    // const languageServerRef = useRef();
-
-    const getLanguage = () => {
-        return language === 'javascript' ? javascript() : StreamLanguage.define(groovy);
-    }
-
-    useEffect(() => {
-        if (editorRef.current) {
-            editorRef.current.dispatch({
-                effects: compartmentRef.current.reconfigure(getLanguage())
-            })
-        }
-    }, [language]);
 
     useEffect(() => {
         if (viewRef.current) {
@@ -59,14 +34,6 @@ export default function Editor(props) {
                 }
             });
 
-            const ls = languageServer({
-                // WebSocket server uri and other client options.
-                serverUri,
-                rootUri: 'file:///',
-                documentUri: `file:///${Math.random().toString(36).substring(7)}.js`, // Unique document URI for the editor.
-                languageId: 'javascript' // As defined at https://microsoft.github.io/language-server-protocol/specification#textDocumentItem.
-            });
-
             editorRef.current = new EditorView({
                 parent: viewRef.current,
                 doc: value,
@@ -75,23 +42,19 @@ export default function Editor(props) {
                     updateListener,
                     EditorState.readOnly.of(readOnly),
                     indentUnit.of("    "), // 4 spaces
-                    keymap.of([indentWithTab]),
-                    compartmentRef.current.of(getLanguage()),
-                    lintGutter(),
-                    linter(esLint(new eslint.Linter(), {
-                        languageOptions: {
-                            globals: {
-                                ...globals.es2015
+                    keymap.of([
+                        {
+                            key: 'Tab',
+                            preventDefault: true,
+                            shift: indentLess,
+                            run: e => {
+                                if (!completionStatus(e.state)) return indentMore(e);
+                                return acceptCompletion(e);
                             },
-                            parserOptions: {
-                                ecmaVersion: 2015,
-                                sourceType: "module",
-                            },
-                        }
-                    })),
-                    ls,
+                        },
+                    ]),
                     ...extensions
-                ]
+                ].filter(Boolean)
             });
 
         }
