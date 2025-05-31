@@ -22,7 +22,6 @@ export default function JavascriptEditor(props) {
 
     const ls = useMemo(() => {
         return languageServer({
-            // WebSocket server uri and other client options.
             serverUri: 'ws://localhost:3000/javascript',
             rootUri: 'file:///',
             documentUri: `file:///`, // Unique document URI for the editor.
@@ -38,8 +37,11 @@ export default function JavascriptEditor(props) {
                 },
                 parserOptions: {
                     ecmaVersion: 2015,
-                    sourceType: "module",
-                },
+                    sourceType: "script",
+                    ecmaFeatures: {
+                        globalReturn: true,
+                    }
+                }
             }
         }));
     }, []);
