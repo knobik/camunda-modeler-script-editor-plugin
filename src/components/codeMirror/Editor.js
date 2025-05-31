@@ -10,6 +10,7 @@ import {groovy} from "@codemirror/legacy-modes/mode/groovy"
 import { linter, lintGutter } from '@codemirror/lint'
 import * as eslint from "eslint-linter-browserify";
 import globals from 'globals'
+import {languageServer, LanguageServerClient} from 'codemirror-languageserver';
 
 import {useRef, useEffect} from "@bpmn-io/properties-panel/preact/hooks";
 
@@ -22,9 +23,12 @@ export default function Editor(props) {
         readOnly = false,
     } = props;
 
+    const serverUri = 'ws://localhost:3000/javascript';
+
     const viewRef = useRef(null);
     const editorRef = useRef(null);
     const compartmentRef = useRef(new Compartment);
+    // const languageServerRef = useRef();
 
     const getLanguage = () => {
         return language === 'javascript' ? javascript() : StreamLanguage.define(groovy);
@@ -55,6 +59,14 @@ export default function Editor(props) {
                 }
             });
 
+            const ls = languageServer({
+                // WebSocket server uri and other client options.
+                serverUri,
+                rootUri: 'file:///',
+                documentUri: `file:///${Math.random().toString(36).substring(7)}.js`, // Unique document URI for the editor.
+                languageId: 'javascript' // As defined at https://microsoft.github.io/language-server-protocol/specification#textDocumentItem.
+            });
+
             editorRef.current = new EditorView({
                 parent: viewRef.current,
                 doc: value,
@@ -69,14 +81,15 @@ export default function Editor(props) {
                     linter(esLint(new eslint.Linter(), {
                         languageOptions: {
                             globals: {
-                                ...globals.es2015,
+                                ...globals.es2015
                             },
                             parserOptions: {
                                 ecmaVersion: 2015,
-                                sourceType: "script",
+                                sourceType: "module",
                             },
                         }
                     })),
+                    ls,
                     ...extensions
                 ]
             });

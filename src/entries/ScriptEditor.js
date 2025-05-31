@@ -130,25 +130,6 @@ function CodeEditor(props) {
                     ]}
                 />
             )}
-            {/*<textarea*/}
-            {/*    ref={ ref }*/}
-            {/*    id={ prefixId(id) }*/}
-            {/*    name={ id }*/}
-            {/*    spellCheck="false"*/}
-            {/*    class={ classnames(*/}
-            {/*        'bio-properties-panel-input',*/}
-            {/*        monospace ? 'bio-properties-panel-input-monospace' : '',*/}
-            {/*        autoResize ? 'auto-resize' : '')*/}
-            {/*    }*/}
-            {/*    onInput={ handleLocalInput }*/}
-            {/*    onFocus={ onFocus }*/}
-            {/*    onBlur={ handleOnBlur }*/}
-            {/*    placeholder={ placeholder }*/}
-            {/*    rows={ rows }*/}
-            {/*    value={ localValue }*/}
-            {/*    disabled={ disabled }*/}
-            {/*    data-gramm="false"*/}
-            {/*/>*/}
         </div>
     );
 }

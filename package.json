@@ -53,6 +53,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "webpack": "^5.90.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "codemirror-languageserver": "^1.12.1"
   }
 }
