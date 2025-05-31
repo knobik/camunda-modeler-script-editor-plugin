@@ -45,7 +45,6 @@
     "camunda-transaction-boundaries": "^1.1.2",
     "classnames": "^2.5.1",
     "codemirror": "^6.0.1",
-    "codemirror-languageserver": "^1.12.1",
     "eslint-linter-browserify": "^9.28.0",
     "globals": "^16.2.0",
     "htm": "^3.1.1",
@@ -56,5 +55,8 @@
     "react-dom": "^19.1.0",
     "webpack": "^5.90.0",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@marimo-team/codemirror-languageserver": "^1.15.14"
   }
 }

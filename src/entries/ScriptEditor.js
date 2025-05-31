@@ -93,6 +93,12 @@ function ScriptEditor(props) {
                 maxHeight: maxHeight,
                 border: '1px solid silver',
             },
+            '.cm-tooltip pre': {
+                margin: '2px 5px',
+            },
+            '.cm-tooltip p': {
+                margin: '7px 5px 2px 5px',
+            },
         });
     }, []);
 

@@ -1,5 +1,5 @@
 import Editor from "../components/codeMirror/Editor";
-import {languageServer} from "codemirror-languageserver";
+import {languageServer} from "@marimo-team/codemirror-languageserver";
 import {useMemo} from "@bpmn-io/properties-panel/preact/hooks";
 import {javascript, esLint} from "@codemirror/lang-javascript"
 import {linter, lintGutter} from "@codemirror/lint"
@@ -25,7 +25,14 @@ export default function JavascriptEditor(props) {
             serverUri: 'ws://localhost:3000/javascript',
             rootUri: 'file:///',
             documentUri: `file:///`, // Unique document URI for the editor.
-            languageId: 'javascript' // As defined at https://microsoft.github.io/language-server-protocol/specification#textDocumentItem.
+            languageId: 'javascript', // As defined at https://microsoft.github.io/language-server-protocol/specification#textDocumentItem.
+
+            keyboardShortcuts: {
+                rename: 'F2',                // Default: F2
+                goToDefinition: 'ctrlcmd',   // Ctrl/Cmd + Click
+            },
+
+            allowHTMLContent: true,
         });
     }, []);
 
@@ -39,7 +46,7 @@ export default function JavascriptEditor(props) {
                     ecmaVersion: 2015,
                     sourceType: "script",
                     ecmaFeatures: {
-                        globalReturn: true,
+                        globalReturn: true
                     }
                 }
             }
