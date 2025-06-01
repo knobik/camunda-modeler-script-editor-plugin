@@ -1,25 +1,49 @@
-import {Group} from '@bpmn-io/properties-panel';
 import {ScriptTaskProps} from "./props/ScriptTaskProps";
+import {InputProps} from "./props/InputProps";
+import {OutputProps} from "./props/OutputProps";
+import {TaskListenerProps} from "./props/ListenerProps";
 
 const LOW_PRIORITY = 500;
 
-function ScriptEditorPlugin(propertiesPanel, translate) {
+function ScriptEditorPlugin(propertiesPanel, injector) {
 
     this.getGroups = function (element) {
         return function (groups) {
-            // replace CamundaPlatform__Script with custom ScriptProps
 
+            // replace CamundaPlatform__Script with custom ScriptProps
             groups = groups.map(group => {
+
                 if (group.id === 'CamundaPlatform__Script') {
-                    return {
-                        label: translate('Script'),
-                        id: 'CamundaPlatform__Script',
-                        component: Group,
-                        entries: [
-                            ...ScriptTaskProps({element})
-                        ]
+                    group.entries = [
+                        ...ScriptTaskProps({element})
+                    ];
+                }
+
+                if (group.id === 'CamundaPlatform__Input') {
+                    group = {
+                        ...group,
+                        ...InputProps({element, injector})
                     };
                 }
+
+                if (group.id === 'CamundaPlatform__Output') {
+                    group = {
+                        ...group,
+                        ...OutputProps({element, injector})
+                    };
+                }
+
+                if (group.id === 'CamundaPlatform__TaskListener') {
+                    group = {
+                        ...group,
+                        ...TaskListenerProps({element, injector})
+                    };
+                }
+
+                // CamundaPlatform__TaskListener
+                // CamundaPlatform__ExecutionListener
+                // CamundaPlatform__Condition
+
                 return group;
             });
 
@@ -32,7 +56,7 @@ function ScriptEditorPlugin(propertiesPanel, translate) {
 
 ScriptEditorPlugin.$inject = [
     'propertiesPanel',
-    'translate',
+    'injector'
 ];
 
 export default {

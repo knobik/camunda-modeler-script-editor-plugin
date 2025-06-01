@@ -4,7 +4,6 @@ import {
 } from 'bpmn-js/lib/util/ModelUtil';
 
 import {
-    TextAreaEntry,
     isTextAreaEntryEdited,
     TextFieldEntry,
     isTextFieldEntryEdited,
@@ -13,7 +12,6 @@ import {
 } from '@bpmn-io/properties-panel';
 
 import { useService } from "bpmn-js-properties-panel";
-import Editor from "../components/codeMirror/Editor";
 import ScriptEditorEntry from "../entries/ScriptEditor";
 
 /**
@@ -206,18 +204,8 @@ function Script(props) {
         getValue,
         setValue,
         debounce,
-        language: getScriptFormat(element),
+        language: getScriptFormat(businessObject),
     });
-
-    // return TextAreaEntry({
-    //     element,
-    //     id: idPrefix + 'scriptValue',
-    //     label: translate('Script'),
-    //     getValue,
-    //     setValue,
-    //     debounce,
-    //     monospace: true
-    // });
 }
 
 function Resource(props) {
