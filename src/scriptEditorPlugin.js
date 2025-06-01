@@ -1,7 +1,8 @@
 import {ScriptTaskProps} from "./props/ScriptTaskProps";
 import {InputProps} from "./props/InputProps";
 import {OutputProps} from "./props/OutputProps";
-import {TaskListenerProps} from "./props/ListenerProps";
+import {TaskListenerProps, ExecutionListenerProps} from "./props/ListenerProps";
+import {ConditionProps} from "./props/ConditionProps";
 
 const LOW_PRIORITY = 500;
 
@@ -10,7 +11,6 @@ function ScriptEditorPlugin(propertiesPanel, injector) {
     this.getGroups = function (element) {
         return function (groups) {
 
-            // replace CamundaPlatform__Script with custom ScriptProps
             groups = groups.map(group => {
 
                 if (group.id === 'CamundaPlatform__Script') {
@@ -40,9 +40,18 @@ function ScriptEditorPlugin(propertiesPanel, injector) {
                     };
                 }
 
-                // CamundaPlatform__TaskListener
-                // CamundaPlatform__ExecutionListener
-                // CamundaPlatform__Condition
+                if (group.id === 'CamundaPlatform__ExecutionListener') {
+                    group = {
+                        ...group,
+                        ...ExecutionListenerProps({element, injector})
+                    };
+                }
+
+                if (group.id === 'CamundaPlatform__Condition') {
+                    group.entries = [
+                        ...ConditionProps({element})
+                    ];
+                }
 
                 return group;
             });
