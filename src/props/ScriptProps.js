@@ -103,6 +103,7 @@ function Format(props) {
         return [
             { value: 'javascript', label: 'Javascript' },
             { value: 'groovy', label: 'Groovy' },
+            // { value: 'freemarker', label: 'FreeMarker' },
         ];
     };
 

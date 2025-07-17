@@ -59,9 +59,10 @@ export default function JavascriptEditor(props) {
         setValue={setValue}
         value={value}
         readOnly={readOnly}
+        onFocus={onFocus}
+        onBlur={onBlur}
 
         extensions={[
-            EditorView.domEventHandlers({blur: onBlur, focus: onFocus}),
             javascript(),
             lintGutter(),
             eslintExtension,

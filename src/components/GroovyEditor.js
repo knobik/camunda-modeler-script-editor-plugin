@@ -21,9 +21,10 @@ export default function GroovyEditor(props) {
         setValue={setValue}
         value={value}
         readOnly={readOnly}
+        onFocus={onFocus}
+        onBlur={onBlur}
 
         extensions={[
-            EditorView.domEventHandlers({blur: onBlur, focus: onFocus}),
             StreamLanguage.define(groovy),
             ...extensions,
         ].filter(Boolean)}

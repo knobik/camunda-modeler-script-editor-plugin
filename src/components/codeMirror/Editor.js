@@ -11,6 +11,8 @@ export default function Editor(props) {
         extensions = [],
         setValue,
         value,
+        onFocus,
+        onBlur,
         readOnly = false,
     } = props;
 
@@ -53,6 +55,7 @@ export default function Editor(props) {
                             },
                         },
                     ]),
+                    EditorView.domEventHandlers({blur: onBlur, focus: onFocus}),
                     ...extensions
                 ].filter(Boolean)
             });

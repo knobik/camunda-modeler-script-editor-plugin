@@ -20,6 +20,7 @@ import {
 import {isFunction} from 'min-dash';
 import JavascriptEditor from "../components/JavascriptEditor";
 import GroovyEditor from "../components/GroovyEditor";
+import Editor from "../components/codeMirror/Editor";
 
 function ScriptEditor(props) {
 
@@ -134,6 +135,21 @@ function ScriptEditor(props) {
             )}
             {language === 'groovy' && (
                 <GroovyEditor
+                    id={prefixId(id)}
+                    ref={ref}
+                    setValue={handleLocalInput}
+                    value={localValue}
+                    readOnly={disabled}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    extensions={[
+                        theme,
+                        EditorView.lineWrapping,
+                    ].filter(Boolean)}
+                />
+            )}
+            {(language !== 'groovy' && language !== 'javascript') && (
+                <Editor
                     id={prefixId(id)}
                     ref={ref}
                     setValue={handleLocalInput}
