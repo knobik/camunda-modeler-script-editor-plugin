@@ -6,13 +6,11 @@ import {acceptCompletion, completionStatus} from '@codemirror/autocomplete';
 import {indentUnit} from '@codemirror/language';
 import {useRef, useEffect} from "@bpmn-io/properties-panel/preact/hooks";
 
-export default function Editor(props) {
+export default function EditorCodeMirror(props) {
     const {
         extensions = [],
         setValue,
         value,
-        onFocus,
-        onBlur,
         readOnly = false,
     } = props;
 
@@ -55,7 +53,6 @@ export default function Editor(props) {
                             },
                         },
                     ]),
-                    EditorView.domEventHandlers({blur: onBlur, focus: onFocus}),
                     ...extensions
                 ].filter(Boolean)
             });

@@ -1,4 +1,4 @@
-import Editor from "../components/codeMirror/Editor";
+import EditorCodeMirror from "./codeMirror/EditorCodeMirror";
 import {EditorView} from "codemirror"
 import {StreamLanguage} from '@codemirror/language';
 import {groovy} from "@codemirror/legacy-modes/mode/groovy"
@@ -15,16 +15,15 @@ export default function GroovyEditor(props) {
         onBlur,
     } = props;
 
-    return <Editor
+    return <EditorCodeMirror
         id={id}
         ref={ref}
         setValue={setValue}
         value={value}
         readOnly={readOnly}
-        onFocus={onFocus}
-        onBlur={onBlur}
 
         extensions={[
+            EditorView.domEventHandlers({blur: onBlur, focus: onFocus}),
             StreamLanguage.define(groovy),
             ...extensions,
         ].filter(Boolean)}

@@ -58,6 +58,10 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@marimo-team/codemirror-languageserver": "^1.15.14"
+    "@marimo-team/codemirror-languageserver": "^1.15.14",
+    "css-loader": "^7.1.2",
+    "monaco-editor": "^0.52.2",
+    "monaco-editor-webpack-plugin": "^7.1.0",
+    "style-loader": "^4.0.0"
   }
 }
