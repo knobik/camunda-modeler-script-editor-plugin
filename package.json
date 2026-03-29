@@ -59,6 +59,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@marimo-team/codemirror-languageserver": "^1.15.14"
+    "@marimo-team/codemirror-languageserver": "^1.16.12"
   }
 }
