@@ -47,7 +47,7 @@
     "classnames": "^2.5.1",
     "codemirror": "^6.0.1",
     "eslint-linter-browserify": "^9.28.0",
-    "globals": "^16.2.0",
+    "globals": "^17.4.0",
     "htm": "^3.1.1",
     "ids": "^1.0.5",
     "inherits": "^2.0.4",
