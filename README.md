@@ -26,7 +26,7 @@ Without it the editor still works — you just won't get autocomplete or go-to-d
 
 1. Clone or download this repository into your Camunda Modeler plugins directory:
    ```
-   ~/.config/camunda-modeler/plugins/camunda-modeler-script-editor-plugin
+   camunda-modeler/resources/plugins/camunda-modeler-script-editor-plugin
    ```
 
 2. Install dependencies and build:
