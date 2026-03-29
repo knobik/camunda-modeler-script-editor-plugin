@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Create release archive
+        run: |
+          mkdir -p /tmp/camunda-modeler-script-editor-plugin
+          rsync -a --exclude node_modules --exclude .git --exclude .github --exclude src --exclude .idea . /tmp/camunda-modeler-script-editor-plugin/
+          cd /tmp
+          zip -r ${{ github.workspace }}/camunda-modeler-script-editor-plugin.zip camunda-modeler-script-editor-plugin
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: camunda-modeler-script-editor-plugin.zip
+          generate_release_notes: true

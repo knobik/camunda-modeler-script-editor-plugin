@@ -6,6 +6,7 @@
   "scripts": {
     "all": "run-s bundle",
     "client": "run-s bundle",
+    "build": "webpack",
     "bundle": "webpack",
     "dev": "webpack --watch"
   },
